@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GastroScanAI | Explainable AI for Stomach Cancer Detection</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #3a86ff;
+            --light-blue: #e2f0ff;
+            --dark-blue: #2667cc;
+            --medical-green: #7ae582;
+            --white: #ffffff;
+            --light-gray: #f8f9fa;
+            --dark-gray: #212529;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            line-height: 1.6;
+            color: var(--dark-gray);
+            background-color: var(--white);
+            scroll-behavior: smooth;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                        url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            color: var(--white);
+            text-align: center;
+            padding: 8rem 1rem;
+            margin-bottom: 3rem;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            animation: fadeIn 1s ease-out;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+        
+        .hero-mission {
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background-color: var(--primary-blue);
+            color: var(--white);
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            background-color: var(--dark-blue);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Section Styling */
+        section {
+            max-width: 1200px;
+            margin: 0 auto 5rem auto;
+            padding: 0 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        h2 {
+            color: var(--primary-blue);
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+        }
+        
+        .section-content {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 3rem;
+        }
+        
+        .text-content {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .visual-content {
+            flex: 1;
+            min-width: 300px;
+            text-align: center;
+        }
+        
+        .visual-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        
+        /* How It Works */
+        .steps {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+            margin-top: 3rem;
+        }
+        
+        .step {
+            flex: 1;
+            min-width: 200px;
+            background-color: var(--light-blue);
+            padding: 2rem;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .step:hover {
+            transform: translateY(-10px);
+        }
+        
+        .step-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-blue);
+        }
+        
+        .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-bottom: 1rem;
+        }
+        
+        .step h3 {
+            margin-bottom: 1rem;
+            color: var(--dark-blue);
+        }
+        
+        /* Tags */
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-top: 2rem;
+        }
+        
+        .tag {
+            background-color: var(--light-blue);
+            color: var(--primary-blue);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        /* Why It Matters */
+        .stats {
+            background-color: var(--light-blue);
+            padding: 3rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+            text-align: center;
+        }
+        
+        .stat-icon {
+            font-size: 3rem;
+            color: var(--primary-blue);
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Led By */
+        .team-card {
+            background-color: var(--light-gray);
+            padding: 2rem;
+            border-radius: 8px;
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .team-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 1.5rem;
+            border: 5px solid var(--primary-blue);
+        }
+        
+        .team-name {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark-blue);
+        }
+        
+        .team-title {
+            font-weight: 500;
+            margin-bottom: 1rem;
+            color: var(--primary-blue);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark-gray);
+            color: var(--white);
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+        
+        .footer-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .footer-logo {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        .copyright {
+            margin-bottom: 1.5rem;
+        }
+        
+        .contact-link {
+            color: var(--medical-green);
+            text-decoration: none;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero {
+                padding: 5rem 1rem;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .section-content {
+                flex-direction: column;
+            }
+            
+            .text-content, .visual-content {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>GastroScanAI</h1>
+            <p class="hero-subtitle">Explainable AI for Early Detection of Stomach Cancer</p>
+            <p class="hero-mission">Empowering doctors with AI-powered endoscopy analysis for faster, more accurate, and transparent diagnostics.</p>
+            <a href="#about" class="cta-button">Learn More</a>
+        </div>
+    </section>
+    
+    <!-- About the Project -->
+    <section id="about">
+        <h2>About the Project</h2>
+        <div class="section-content">
+            <div class="text-content">
+                <p>GastroScanAI is an innovative explainable AI (XAI) system designed to assist medical professionals in detecting early signs of stomach cancer from endoscopy images. Our solution combines deep learning with visual explanation techniques to provide not just predictions, but understandable insights into the AI's decision-making process.</p>
+                <p>Unlike traditional black-box AI systems, GastroScanAI highlights suspicious areas in endoscopy images using Grad-CAM technology, allowing doctors to understand why the system flagged certain regions while maintaining ultimate diagnostic authority.</p>
+                <div class="tags">
+                    <span class="tag">#AI</span>
+                    <span class="tag">#Healthcare</span>
+                    <span class="tag">#XAI</span>
+                    <span class="tag">#CancerDetection</span>
+                    <span class="tag">#LowResourceClinics</span>
+                </div>
+            </div>
+            <div class="visual-content">
+                <img src="ПереводНеофитЭГДС.webp">
+            </div>
+        </div>
+    </section>
+    
+    <!-- How It Works -->
+    <section id="how-it-works">
+        <h2>How It Works</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-icon">📷</div>
+                <h3>Input</h3>
+                <p>Doctor uploads endoscopy images to the GastroScanAI system</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-icon">🤖</div>
+                <h3>AI Analysis</h3>
+                <p>Our deep learning model scans the image for potential anomalies</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-icon">🔍</div>
+                <h3>Visual Explanation</h3>
+                <p>Grad-CAM technology highlights suspicious areas with heatmaps</p>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-icon">👨‍⚕️</div>
+                <h3>Doctor Review</h3>
+                <p>Physician reviews the AI's findings with visual explanations</p>
+            </div>
+        </div>
+        <div class="visual-content" style="margin-top: 3rem;">
+            <img src="https://images.unsplash.com/photo-1581595219315-a187dd40c322?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="AI explanation process">
+        </div>
+    </section>
+    
+    <!-- Why It Matters -->
+    <section id="why-it-matters">
+        <h2>Why It Matters</h2>
+        <div class="section-content">
+            <div class="text-content">
+                <p>Stomach cancer is the fifth most common cancer worldwide, with over 1 million new cases annually. Tragically, many cases are detected at late stages when treatment options are limited and survival rates are low.</p>
+                <p>GastroScanAI addresses two critical challenges: the shortage of specialist gastroenterologists in rural and low-resource areas, and the need for more transparent AI systems that doctors can trust and understand.</p>
+                <p>Our solution is designed to be lightweight and accessible, requiring minimal computational resources, making it ideal for clinics with limited infrastructure.</p>
+            </div>
+            <div class="visual-content">
+                <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Global healthcare access">
+            </div>
+        </div>
+        <div class="stats">
+            <div class="stat-icon">⚠️</div>
+            <p>Early detection of stomach cancer can improve 5-year survival rates from 30% to over 90%</p>
+        </div>
+    </section>
+    
+    <!-- Led By -->
+    <section id="team">
+        <h2>Led By</h2>
+        <div class="team-card">
+            <img src="View recent photos 2.jpeg" alt="Magzhan Mardanov" class="team-photo">
+            <h3 class="team-name">Magzhan Mardanov</h3>
+            <p class="team-title">Atyrau Bilim-Innovation Lyceum, Atyrau, Kazakhstan</p>
+            <p>High school innovator passionate about AI for good and healthcare accessibility.</p>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">GastroScanAI</div>
+            <p class="copyright">© 2025 GastroScanAI Project</p>
+            <p><a href="mailto:mardanov.magzhan@gmail.com" class="contact-link">mardanov.magzhan@gmail.com</a></p>
+        </div>
+    </footer>
+    
+    <script>
+        // Animation on scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('section');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>
